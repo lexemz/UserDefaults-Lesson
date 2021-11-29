@@ -14,7 +14,14 @@ class UserDefaultsManagerForDefaultTypes {
     private let key = "strings"
     
     private init() {}
-
+    
+    func fetchData() -> [String] {
+        if let strings = userDefaults.value(forKey: key) as? [String] {
+            return strings
+        }
+        return []
+    }
+    
     func setData(string: String) {
         var strings = fetchData()
         strings.append(string)
@@ -25,12 +32,5 @@ class UserDefaultsManagerForDefaultTypes {
         var strings = fetchData()
         strings.remove(at: index)
         userDefaults.set(strings, forKey: key)
-    }
-    
-    func fetchData() -> [String] {
-        if let strings = userDefaults.value(forKey: key) as? [String] {
-            return strings
-        }
-        return []
     }
 }

@@ -12,6 +12,9 @@ class CustomTypesTable: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Fetching data from UserDefaults
+        persons = UserDefaultsManagerForCustomTypes.shared.fetchData()
     }
 
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
@@ -23,7 +26,7 @@ class CustomTypesTable: UITableViewController {
         tableView.insertRows(at: [indexPath], with: .automatic)
 
         // Saving new data in UserDefaults
-        
+        UserDefaultsManagerForCustomTypes.shared.setData(person: person)
     }
 }
 
@@ -47,4 +50,14 @@ extension CustomTypesTable {
 
 // MARK: - Table view delegate
 
-extension CustomTypesTable {}
+extension CustomTypesTable {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            persons.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+
+            // Removing Data in UserDefaults
+            UserDefaultsManagerForCustomTypes.shared.removeData(at: indexPath.row)
+        }
+    }
+}
